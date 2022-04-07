@@ -223,7 +223,7 @@ def main(genomas, config):
 
         indice_cano = 0
         if len(passaros) > 0:
-            if len(canos) > 1 and passaro[0].x > (canos[0].x + canos[0].CANO_TOPO.get_width()):
+            if len(canos) > 1 and passaros[0].x > (canos[0].x + canos[0].CANO_TOPO.get_width()):
                 indice_cano = 1
         else:
             rodando = False
@@ -274,8 +274,20 @@ def main(genomas, config):
         desenhar_tela(tela, passaros, canos, chao, pontos)
 
 
-def rodar():
-    pass
+def rodar(caminho_config):
+    config = neat.config.Config(neat.DefaultGenome, neat.DefaultReproduction, neat.DefaultSpeciesSet, neat.DefaultStagnation, caminho_config)
+    populacao = neat.Population(config)
+    populacao.add_reporter(neat.StdOutReporter(True))
+    populacao.add_reporter(neat.StatisticsReporter())
+
+    
+    if ia_jogando:
+         populacao.run(main, 50)
+    else:
+         main(None, None)
+
 
 if __name__ == '__main__':
-    main()
+    caminho = os.path.dirname(__file__)
+    caminho_config = os.path.join(caminho, 'config.txt')
+    rodar(caminho_config)
